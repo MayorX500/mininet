@@ -2016,19 +2016,22 @@ class MiniEdit( Frame ):
 
             f.write("\n")
             f.write("    CLI(net)\n")
-            for widget, item in self.widgetToItem:
-                name = widget[ 'text' ]
-                tags = self.canvas.gettags( item )
+            for widget, item in self.widgetToItem.items():
+                name = widget.cget('text')  # Use .cget() method to get the 'text' attribute of the widget
+                tags = self.canvas.gettags(item)  # This returns a tuple of tags, so no need to convert to string
+
+                # Check if 'Host' is in the tags
                 if 'Host' in tags:
-                    opts = self.hostOpts[name]
-                    # Run User Defined Stop Command
+                    opts = self.hostOpts[name]  # Directly work with the dictionary
+                    # Check if 'stopCommand' key exists in the dictionary and execute command if it does
                     if 'stopCommand' in opts:
-                        f.write("    "+name+".cmdPrint('"+opts['stopCommand']+"')\n")
+                        f.write("    " + name + ".cmdPrint('" + opts['stopCommand'] + "')\n")
+
+                # Similarly for 'Switch'
                 if 'Switch' in tags:
-                    opts = self.switchOpts[name]
-                    # Run User Defined Stop Command
+                    opts = self.switchOpts[name]  # Directly work with the dictionary
                     if 'stopCommand' in opts:
-                        f.write("    "+name+".cmdPrint('"+opts['stopCommand']+"')\n")
+                        f.write("    " + name + ".cmdPrint('" + opts['stopCommand'] + "')\n")
 
             f.write("    net.stop()\n")
             f.write("\n")
